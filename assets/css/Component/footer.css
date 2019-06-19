@@ -2,4 +2,6 @@
     border-top: 1px solid var(--separator-color);
     background-color: var(--footer-bg-color);
     padding: 0.4em 0.6em;
+    position: sticky;
+    bottom:0;
 }
