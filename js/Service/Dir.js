@@ -1,8 +1,22 @@
 const fs = require('fs'), {join, parse} = require('path');
+const EventEmitter = require("events");
 
-class DirService {
+class DirService extends EventEmitter {
     constructor( dir = null){
-        this.dir = dir || process.cwd; // dir is passed in, null or the current working directory
+        super();
+        this.dir = dir || process.cwd(); // dir is passed in, null or the current working directory
+    }
+
+    setDir( dir = ""){
+        let newDir = join(this.dir, dir);
+        // Early exit
+        if(DirService.getStats(newDir) === false) return;
+        this.dir = newDir;
+        this.notify();
+    }
+
+    notify(){
+        this.emit("update")
     }
 
     static readDir( dir ){
@@ -23,6 +37,7 @@ class DirService {
         // stats.isDirectory() - Returns true if the fs.Stats object describes a file system directory.
         const collection = DirService.readDir(this.dir).filter((fInfo) => fInfo.stats.isDirectory());
         if (!this.isRoot()){
+            // if we are not in the system root, preprend the collection with ..
             collection.unshift({fileName: ".."});
         }
         return collection;
@@ -34,7 +49,7 @@ class DirService {
     }
 
     isRoot(){
-        const {root} = parse(this.dir);
+        const { root } = parse(this.dir);
         return (root === this.dir);
     }
 
