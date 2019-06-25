@@ -11,16 +11,12 @@ class DirListView {
         // subscribe to DirService updates
         dirService.on("update", () => this.update(dirService.getDirList()));
     }
-    // if a dir is opened, set the current dir to that
-    onOpenDir(url){
-        //e.preventDefault();
-        this.dir.setDir(url);
-    }
+    // if a new collection is available, update the UI
     update( collection ) {
         this.el.innerHTML = '';
         collection.forEach((fInfo) => {
             this.el.insertAdjacentHTML("beforeend", 
-            `<li class ="dir-list__li" data-file=${fInfo.fileName}>
+            `<li class ="dir-list__li" data-file="${fInfo.fileName}" >
             <i class="icon">folder</i> ${fInfo.fileName}</li>`
             );
         });
@@ -29,12 +25,13 @@ class DirListView {
     }
     
     bindUi(){
-        const liArr = Array.from(this.el.querySelectorAll("li[data-file]"))
-        const files = liArr.map(el => el.dataset.file);
-        // the problem is here
-        liArr.forEach( (el, i) => {
-            // eventListener is working
-            el.addEventListener("click", () => this.onOpenDir(files[i]), false);
+        const liArr = Array.from(this.el.querySelectorAll("li[data-file]"));
+        // for Each element, add a click event that sets a new directory path
+        liArr.forEach( (el) => {
+            el.addEventListener("click", (e) => {
+                e.preventDefault();
+                this.dir.setDir(el.dataset.file)
+            }, false);
         })
     }
 }

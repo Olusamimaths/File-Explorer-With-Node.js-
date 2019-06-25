@@ -15,6 +15,16 @@ class DirService extends EventEmitter {
         this.notify();
     }
 
+    getDirPath(){
+        return this.dir;
+    }
+
+    getFilePath(fileName){
+        let filePath = join(this.dir, fileName);
+        return filePath;
+    }
+
+
     notify(){
         this.emit("update")
     }
@@ -25,7 +35,7 @@ class DirService extends EventEmitter {
                 stats = DirService.getStats( filePath );
             if (stats === false) return false; // if the stats cannot be obtained, the array entry is set to false
             return {
-                fileName, 
+                fileName: fileName, 
                 stats
             };
         });
