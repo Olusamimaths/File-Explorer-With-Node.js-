@@ -4,4 +4,12 @@
     padding: 0.4em 0.6em;
     position: sticky;
     bottom:0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+}
+
+.footer__header {
+    margin: 0.2em auto 0 0;
+    font-size: 1em;
 }
